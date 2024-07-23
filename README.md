@@ -2,6 +2,8 @@
 
 **@formuverse/angular** is an open-source library that significantly simplifies working with forms in Angular, providing a more intuitive and efficient experience for developers.
 
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.1.
+
 ## Key Features
 
 - **Ease of Use**: Simplifies the creation and management of complex forms.
