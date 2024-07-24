@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'lib-multi-field',
+  selector: 'formuverse-multi-field',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './multi-field.component.html',
