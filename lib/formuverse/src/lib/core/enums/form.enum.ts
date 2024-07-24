@@ -1,0 +1,15 @@
+export enum FormTypeEnum {
+    INPUT = 'input',
+    SELECT = 'select',
+    TEXTAREA = 'textarea',
+    CHECKBOX = 'checkbox',
+    RADIO = 'radio',
+    DATE = 'date',
+    TIME = 'time',
+    DATETIME = 'datetime',
+    FILE = 'file',
+    PASSWORD = 'password',
+    EMAIL = 'email',
+    NUMBER = 'number',
+    HIDDEN = 'hidden',
+}
