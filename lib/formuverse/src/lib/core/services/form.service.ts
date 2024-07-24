@@ -1,13 +1,17 @@
-import { AbstractControl, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 import {
     FormControlsInterface,
     FormDataInterface,
+    FormFieldMultipleInterface,
     FormGroupInterface,
     FormType,
+    FormuverseAbstractControl,
 } from '../interfaces/data.interface';
-import { FormBase } from '../class/form-base.form';
+import { FormBase } from '../class/formBase';
 import { Injectable } from '@angular/core';
-import { FormTypeEnum } from '../enums/form.enum';
+import { FormFieldMultipleTypeEnum } from '../enums/form.enum';
+import { FormuverseControl } from '../class/formControl';
+import { FormuverseArray } from '../class/formArray';
 
 @Injectable({
     providedIn: 'root'
@@ -42,30 +46,29 @@ export class FormService {
         return allControls;
     }
 
-    private _createFromGroup(group: FormGroupInterface): AbstractControl[] {
+    private _createFromGroup(group: FormGroupInterface): FormuverseAbstractControl<any>[] {
         return group.fields.map((field) => {
-            if (
-                field.type === FormTypeEnum.CHECKBOX ||
-                (field.type === FormTypeEnum.SELECT && field.isMultiple)
+            const validators: ValidatorFn[] = []
+            if(field.validators){
+                for (const validator in field.validators) {
+                    validators.push(field.validators[validator].validator);
+                }
+            }
+            if ([FormFieldMultipleTypeEnum.CHECKBOX, FormFieldMultipleTypeEnum.MULTISELECT].includes(field.type as FormFieldMultipleTypeEnum)
             ) {
+                field = field as FormFieldMultipleInterface;
                 const options =
                     field.options instanceof Array
                         ? field.options.map(
-                              (option) => new FormControl(option.value)
+                              (option) => new FormuverseControl(option.value)
                           )
                         : [];
-                const validators: ValidatorFn[] = []
-                if(field.validators){
-                    for (const validator in field.validators) {
-                        validators.push(field.validators[validator].validator);
-                    }
-                }
-                return new FormArray<any>(
+                return new FormuverseArray(
                     options,
                     validators
                 );
             }
-            return new FormControl<any>(field.initialValue);
+            return new FormuverseControl<any>(field.initialValue, validators);
         });
     }
 }

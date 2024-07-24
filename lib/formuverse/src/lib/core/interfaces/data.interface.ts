@@ -1,11 +1,15 @@
-import { AbstractControl, ValidatorFn } from "@angular/forms";
+import { ValidatorFn } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
-import { FormBase } from "../class/form-base.form";
-import { FormTypeEnum } from "../enums/form.enum";
+import { FormBase } from "../class/formBase";
+import { FormFieldSingleTypeEnum, FormFieldMultipleTypeEnum, CriteriaEnum } from "../enums/form.enum";
+import { FormuverseControl } from "../class/formControl";
+import { FormuverseArray } from "../class/formArray";
 
 export type FormControlsInterface<T>  = {
-    [K in keyof T]: AbstractControl<T[K] | null>
+    [K in keyof T]: FormuverseAbstractControl<T[K] | null>
 };
+
+export type FormuverseAbstractControl<T extends any> = FormuverseControl<T> | FormuverseArray;
 
 export type FormType<T extends Record<string, any>> = FormControlsInterface<T> & FormBase<T>;
 
@@ -14,22 +18,38 @@ export interface FormDataInterface {
 }
 
 export interface FormGroupInterface {
-    fields: FormFieldInterface[];
+    fields: FormFieldType[];
     title: string;
     subtitle: string;
+    dependencies?: dependenciesInterface[];
 }
 
-export interface FormFieldInterface {
+export interface dependenciesInterface {
+    field: string;
+    value: string;
+    criteria: CriteriaEnum;
+}
+
+export type FormFieldType = FormFieldMultipleInterface | FormFieldSingleInterface;
+
+export interface FormFieldMultipleInterface extends FormFieldBaseInterface {
+    type: FormFieldMultipleTypeEnum;
+    options: FormFieldOptionInterface[] | BehaviorSubject<FormFieldOptionInterface[]>;
+}
+
+export interface FormFieldSingleInterface extends FormFieldBaseInterface {
+    type: FormFieldSingleTypeEnum;
+    placeholder?: string;
+}
+
+interface FormFieldBaseInterface {
     name: string;
     initialValue: any;
-    type: FormTypeEnum;
     label: string;
-    placeholder?: string;
     disabled?: boolean;
     readonly?: boolean;
-    options?: FormFieldOptionInterface[] | BehaviorSubject<FormFieldOptionInterface[]>;
-    isMultiple?: boolean;
     validators?: Record<string, FormFieldValidatorInterface>;
+    dependencies?: dependenciesInterface[];
 }
 
 export interface FormFieldOptionInterface {
