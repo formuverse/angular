@@ -1,0 +1,22 @@
+<div class="formGroup">
+    <label *ngIf="field.label" [for]="field.name" class="formLabel">{{ field.label }}</label>
+    <input
+        **ngIf="field.type !== 'textarea'; else textarea"
+        [type]="field.type"
+        [placeholder]="field.placeholder ?? ''"
+        formControlName="{{ field.name }}"
+        [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+        [attr.disabled]="field.disabled ?? null"
+        [attr.readonly]="field.readonly ?? null"
+    />
+    <ng-template #textarea>
+        <textarea
+            [placeholder]="field.placeholder ?? ''"
+            formControlName="{{ field.name }}"
+            [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+            [attr.disabled]="field.disabled ?? null"
+            [attr.readonly]="field.readonly ?? null"
+        ></textarea>
+    </ng-template>
+    <div *ngIf="control.errors" class="formError">{{ errorMessage }}</div>
+</div>

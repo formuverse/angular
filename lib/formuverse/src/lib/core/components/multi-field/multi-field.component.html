@@ -1,0 +1,41 @@
+<div class="formGroup">
+    <label *ngIf="field.label" [for]="field.name" class="formLabel">{{ field.label }}</label>
+    <ng-container *ngIf="field.type === 'checkbox' || field.type === 'radio'">
+        <div *ngFor="let option of options" class="formControl">
+            <input
+                [type]="field.type"
+                [id]="option.value"
+                [value]="option.value"
+                formControlName="{{ field.name }}"
+                [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+                [attr.disabled]="field.disabled ?? null"
+                [attr.readonly]="field.readonly ?? null"
+            />
+            <label [for]="option.value">{{ option.label }}</label>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="field.type === 'select'">
+        <select
+            [id]="field.name"
+            formControlName="{{ field.name }}"
+            [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+            [attr.disabled]="field.disabled ?? null"
+            [attr.readonly]="field.readonly ?? null"
+        >
+            <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+        </select>
+    </ng-container>
+    <ng-container *ngIf="field.type === 'multiselect'">
+        <select
+            [id]="field.name"
+            formControlName="{{ field.name }}"
+            [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+            [attr.disabled]="field.disabled ?? null"
+            [attr.readonly]="field.readonly ?? null"
+            multiple
+        >
+            <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
+        </select>
+    </ng-container>
+    <div *ngIf="control.errors" class="formError">{{ errorMessage }}
+</div>
