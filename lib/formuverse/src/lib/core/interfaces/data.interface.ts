@@ -4,12 +4,13 @@ import { FormBase } from "../class/formBase";
 import { FormFieldSingleTypeEnum, FormFieldMultipleTypeEnum, CriteriaEnum } from "../enums/form.enum";
 import { FormuverseControl } from "../class/formControl";
 import { FormuverseArray } from "../class/formArray";
+import { FormuverseGroup } from "../class/formGroup";
 
-export type FormControlsInterface<T>  = {
-    [K in keyof T]: FormuverseAbstractControl<T[K] | null>
+export type FormControlsInterface<T extends Record<string, any>>  = {
+    [K in keyof T]: FormuverseAbstractControl<T[K]>
 };
 
-export type FormuverseAbstractControl<T extends any> = FormuverseControl<T> | FormuverseArray;
+export type FormuverseAbstractControl<T extends Record<string, any>> = FormuverseControl<T> | FormuverseArray | FormuverseGroup;
 
 export type FormType<T extends Record<string, any>> = FormControlsInterface<T> & FormBase<T>;
 

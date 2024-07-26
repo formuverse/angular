@@ -1,20 +1,23 @@
 <div class="formGroup">
-    <label *ngIf="field.label" [for]="field.name" class="formLabel">{{ field.label }}</label>
-    <ng-container *ngIf="field.type === 'checkbox' || field.type === 'radio'">
-        <div *ngFor="let option of options" class="formControl">
-            <input
-                [type]="field.type"
-                [id]="option.value"
-                [value]="option.value"
-                formControlName="{{ field.name }}"
-                [class]="control.errors ? 'formControl formControlError' : 'formControl'"
-                [attr.disabled]="field.disabled ?? null"
-                [attr.readonly]="field.readonly ?? null"
-            />
-            <label [for]="option.value">{{ option.label }}</label>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="field.type === 'select'">
+    @if (field.label) {
+        <label [for]="field.name" class="formLabel">{{ field.label }}</label>
+    }
+    @if ([fieldTypeEnum.CHECKBOX, fieldTypeEnum.RADIO].includes(field.type)) {
+        @for (option of options; track $index) {
+            <div class="formControl">
+                <input
+                    [type]="field.type"
+                    [id]="option.value"
+                    [value]="option.value"
+                    formControlName="{{ field.name }}"
+                    [class]="control.errors ? 'formControl formControlError' : 'formControl'"
+                    [attr.disabled]="field.disabled ?? null"
+                    [attr.readonly]="field.readonly ?? null"
+                />
+                <label [for]="option.value">{{ option.label }}</label>
+            </div>
+        }
+    } @else if (field.type === fieldTypeEnum.SELECT) {
         <select
             [id]="field.name"
             formControlName="{{ field.name }}"
@@ -24,8 +27,7 @@
         >
             <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
         </select>
-    </ng-container>
-    <ng-container *ngIf="field.type === 'multiselect'">
+    } @else if (field.type === fieldTypeEnum.MULTISELECT) {
         <select
             [id]="field.name"
             formControlName="{{ field.name }}"
@@ -36,6 +38,8 @@
         >
             <option *ngFor="let option of options" [value]="option.value">{{ option.label }}</option>
         </select>
-    </ng-container>
-    <div *ngIf="control.errors" class="formError">{{ errorMessage }}
+    }
+    @if (control.errors) {
+        <div class="formError">{{ errorMessage }}</div>
+    }
 </div>
