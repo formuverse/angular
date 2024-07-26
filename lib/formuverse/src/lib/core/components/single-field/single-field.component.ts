@@ -4,6 +4,7 @@ import {
     FormType,
 } from '../../interfaces/data.interface';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormFieldSingleTypeEnum } from '../../enums/form.enum';
 
 @Component({
     selector: 'formverse-single-field',
@@ -17,6 +18,7 @@ export class SingleFieldComponent {
         alias: 'field',
     });
     public formSignal = input.required<FormType<any>>({ alias: 'form' });
+    public formTypeEnum = FormFieldSingleTypeEnum;
 
     constructor() {}
 
